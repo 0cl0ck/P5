@@ -204,7 +204,7 @@ function sendToLocalStorage() {
     for (let i = 0; i < cart.length; i++) {
       idProducts.push(cart[i].id);
     }
-
+    //Construction de l'objet commande
     const order = {
       contact: {
         firstName: inputFirstName.value,
