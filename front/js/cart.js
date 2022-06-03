@@ -191,43 +191,47 @@ RegexForm();
 function sendToLocalStorage() {
   const form = document.querySelector(".cart__order__form");
   form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    //Récupération des coordonnées du formulaire client
-    let inputFirstName = document.getElementById("firstName");
-    let inputLastName = document.getElementById("lastName");
-    let inputAdress = document.getElementById("address");
-    let inputCity = document.getElementById("city");
-    let inputMail = document.getElementById("email");
+    if (cart.length === 0) {
+      alert("Veuillez sélectionner au moins 1 produit");
+    } else {
+      event.preventDefault();
+      //Récupération des coordonnées du formulaire client
+      let inputFirstName = document.getElementById("firstName");
+      let inputLastName = document.getElementById("lastName");
+      let inputAdress = document.getElementById("address");
+      let inputCity = document.getElementById("city");
+      let inputMail = document.getElementById("email");
 
-    //Construction d'un array depuis le local storage
-    let idProducts = [];
-    for (let i = 0; i < cart.length; i++) {
-      idProducts.push(cart[i].id);
-    }
-    //Construction de l'objet commande
-    const order = {
-      contact: {
-        firstName: inputFirstName.value,
-        lastName: inputLastName.value,
-        address: inputAdress.value,
-        city: inputCity.value,
-        email: inputMail.value,
-      },
-      products: idProducts,
-    };
+      //Construction d'un array depuis le local storage
+      let idProducts = [];
+      for (let i = 0; i < cart.length; i++) {
+        idProducts.push(cart[i].id);
+      }
+      //Construction de l'objet commande
+      const order = {
+        contact: {
+          firstName: inputFirstName.value,
+          lastName: inputLastName.value,
+          address: inputAdress.value,
+          city: inputCity.value,
+          email: inputMail.value,
+        },
+        products: idProducts,
+      };
 
-    fetch("http://localhost:3000/api/products/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(order),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        window.location.href = "./confirmation.html?orderId=" + data.orderId;
+      fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
       })
-      .catch((error) => {
-        alert("Impossible de contacter l'API");
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          window.location.href = "./confirmation.html?orderId=" + data.orderId;
+        })
+        .catch((error) => {
+          alert("Impossible de contacter l'API");
+        });
+    }
   });
 }
 sendToLocalStorage();
